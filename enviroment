@@ -1,0 +1,62 @@
+hostnamectl set-hostname node1
+vim /etc/sysconfig/network-scripts/ifcfg-ens33
+
+su -
+
+systemctl stop network
+systemctl start network
+systemctl restart network
+
+IPADDR="192.168.88.101"
+NETMASK="255.255.255.0"
+GATEWAY="192.168.88.2"
+DNS1="192.168.88.2"
+
+esc
+shift;
+: wq
+
+
+window:
+
+192.168.88.101 node1
+192.168.88.102 node2
+192.168.88.103 node3
+
+linux
+192.168.88.101 node1
+192.168.88.102 node2
+192.168.88.103 node3
+a into insert
+
+vim /etc/hosts
+
+
+ssh-keygen -t rsa -b 4096
+ssh-copy-id node1
+ssh-copy-id node2
+ssh-copy-id node3
+
+useradd hadoop
+passwd hadoop
+ssh-keygen -t rsa -b 4096
+
+
+mkdir -p /export/server
+tar -zxvf jdk-8u361-linux-x64.tar.gz -C /export/server
+
+ln -s /export/server/jdk1.8.0_351 /export/server/jdk
+
+export JAVA_HOME=/export/server/jdk
+export PATH=$PATH:$JAVA_HOME/bin
+
+source /etc/profile
+
+
+rm -f /usr/bin/java
+ln -s /export/server/jdk/bin/java /usr/bin/java
+
+
+
+java -version
+javac -version
